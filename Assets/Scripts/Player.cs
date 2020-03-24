@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Player : MovingObject
 {
@@ -57,6 +55,25 @@ public class Player : MovingObject
         GameManager.m_Instance.m_PlayerTurn = false;
     }
 
+    private void OnTriggerEnter2D(Collider2D i_OtherObject)
+    {
+        switch(i_OtherObject.tag)
+        {
+            case "Exit":
+                Invoke("Restart", k_RestartLevelDelay);
+                enabled = false;
+                break;
+            case "Food":
+                m_Food = m_Food + k_PointsPerFood;
+                i_OtherObject.gameObject.SetActive(false);
+                break;
+            case "Soda":
+                m_Food = m_Food + k_PointsPerFood;
+                i_OtherObject.gameObject.SetActive(false);
+                break;
+        }
+    }
+
     protected override void OnCantMove<T>(T i_Component)
     {
         Wall hitWall = i_Component as Wall;
@@ -67,6 +84,13 @@ public class Player : MovingObject
     private void Restart()
     {
         Application.LoadLevel(Application.loadedLevel);
+    }
+
+    public void LoseFood(int i_Loss)
+    {
+        m_Animator.SetTrigger(k_HitAnimationTrigger);
+        m_Food = m_Food - i_Loss;
+        CheckIfGameOver();
     }
 
     private void CheckIfGameOver()
