@@ -4,6 +4,9 @@ public class GameManager : MonoBehaviour
 {
     public BoardManager m_BoardScript;
     public static GameManager m_Instance = null;
+    public int m_PlayerFoodPoints = 100;
+    [HideInInspector] public bool m_PlayerTurn = true;
+
     private int m_Level = 3;
     
     void Awake()
@@ -27,6 +30,11 @@ public class GameManager : MonoBehaviour
         m_BoardScript.SetupScene(m_Level);
     }
     
+    public void GameOver()
+    {
+        enabled = false;
+    }
+
     // Update is called once per frame
     void Update()
     {
